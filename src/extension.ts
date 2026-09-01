@@ -168,16 +168,32 @@ class HeaterChatViewProvider implements vscode.WebviewViewProvider {
 
     public resolveWebviewView(webviewView: vscode.WebviewView) {
         this._view = webviewView;
-        webviewView.webview.options = { enableScripts: true };
+        
+        const webviewFolderUri = vscode.Uri.joinPath(this._extensionUri, 'webview');
+        webviewView.webview.options = { 
+            enableScripts: true,
+            localResourceRoots: [webviewFolderUri]
+        };
 
-        const uiPath = vscode.Uri.joinPath(this._extensionUri, 'webview', 'ui.html');
-        const langPath = vscode.Uri.joinPath(this._extensionUri, 'webview', 'lang.json');
+        const uiPath = vscode.Uri.joinPath(webviewFolderUri, 'ui.html');
+        const langPath = vscode.Uri.joinPath(webviewFolderUri, 'lang.json');
         
         let html = fs.readFileSync(uiPath.fsPath, 'utf8');
         const langData = fs.existsSync(langPath.fsPath) ? fs.readFileSync(langPath.fsPath, 'utf8') : '{}';
         const apiBase = vscode.workspace.getConfiguration('gpu-heater').get('apiBaseUrl');
 
+        const baseUri = webviewView.webview.asWebviewUri(webviewFolderUri);
+
         html = html.replace('<head>', `<head>
+            <base href="${baseUri}/">
+            <meta http-equiv="Content-Security-Policy" content="
+                default-src 'none';
+                img-src ${webviewView.webview.cspSource} https: data:;
+                style-src ${webviewView.webview.cspSource} 'unsafe-inline';
+                font-src ${webviewView.webview.cspSource} data:;
+                script-src ${webviewView.webview.cspSource} 'unsafe-inline';
+                connect-src ${apiBase || '*'} http://127.0.0.1:* http://localhost:*;
+            ">
             <script>
                 const API_BASE = '${apiBase}';
                 window.i18nData = ${langData};
