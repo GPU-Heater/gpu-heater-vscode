@@ -27,7 +27,7 @@ To connect the plugin to your backend:
 *   Visual Studio Code (v1.80.0 or higher).
 *   An active **GPU-Heater backend server** running at the configured API URL to process LLM requests.
 
-## Installation
+## 📥 Installation
 *  Download this VSIX from Releases
 *  Open Extensions Menu and click Install from VSIX
 *  Select gpu-heater-vscode.vsix from Downloads
