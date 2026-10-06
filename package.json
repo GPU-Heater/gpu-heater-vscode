@@ -1,0 +1,130 @@
+{
+  "name": "gpu-heater-vscode",
+  "displayName": "GPU-Heater Coder",
+  "description": "GPU-Heater Code Assistant & Architect",
+  "version": "1.0.0",
+  "icon": "media/icon.png",
+  "engines": {
+    "vscode": "^1.134.0"
+  },
+  "categories": [
+    "AI",
+    "Programming Languages",
+    "Snippets"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "GPU-Heater AI",
+      "properties": {
+        "gpu-heater.apiBaseUrl": {
+          "type": "string",
+          "default": "http://127.0.0.1:2004",
+          "description": "Backend API Base URL"
+        },
+        "gpu-heater.autoCompleteEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable FIM Auto-Complete"
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "gpu-heater-sidebar",
+          "title": "GPU-Heater",
+          "icon": "media/icon.png"
+        }
+      ]
+    },
+    "views": {
+      "gpu-heater-sidebar": [
+        {
+          "type": "webview",
+          "id": "gpu-heater.chatView",
+          "name": "Chat & AI Assistant"
+        }
+      ]
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "gpu-heater.fixError",
+          "group": "GPU-Heater@1"
+        },
+        {
+          "command": "gpu-heater.refactor",
+          "group": "GPU-Heater@2"
+        },
+        {
+          "command": "gpu-heater.explain",
+          "group": "GPU-Heater@3"
+        },
+        {
+          "command": "gpu-heater.trainSnippet",
+          "group": "GPU-Heater@4"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "gpu-heater.inspectFolder",
+          "group": "GPU-Heater@1"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "gpu-heater.fixError",
+        "title": "GPU-Heater: Fix Error / Debug"
+      },
+      {
+        "command": "gpu-heater.refactor",
+        "title": "GPU-Heater: Refactor Code"
+      },
+      {
+        "command": "gpu-heater.explain",
+        "title": "GPU-Heater: Explain Code"
+      },
+      {
+        "command": "gpu-heater.trainSnippet",
+        "title": "GPU-Heater: Train with Selection"
+      },
+      {
+        "command": "gpu-heater.inspectFolder",
+        "title": "GPU-Heater: Inspect Folder"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.134.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "24.x",
+    "typescript-eslint": "^8.61.1",
+    "eslint": "^10.5.0",
+    "typescript": "^6.0.3",
+    "ts-loader": "^9.6.2",
+    "webpack": "^5.107.2",
+    "webpack-cli": "^7.0.3",
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.0.0"
+  },
+  "overrides": {
+    "diff": "^8.0.4",
+    "serialize-javascript": "^7.0.6"
+  }
+}
